@@ -6,3 +6,9 @@
 
 # Node
 node_modules/
+
+# Xcode
+ios/**/xcuserdata/
+ios/**/DerivedData/
+ios/**/*.xcworkspace/xcuserdata/
+ios/**/build/
