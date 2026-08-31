@@ -5,7 +5,7 @@ Swift Package iOS app (`.iOSApplication` product). No `.xcodeproj`, no CocoaPods
 ## Open + run
 
 ```bash
-open /Users/shivamitankar/scriptflow/ios/Package.swift
+open /Users/shivamitankar/scriptflow/ios/ScriptFlow.swiftpm
 ```
 
 Xcode reads `Package.swift` and treats the folder as an iOS app project. Pick a simulator or your device, hit Run.
@@ -33,11 +33,11 @@ These are the App Review Guideline 4.2 hook — a pure webview would get rejecte
 Root `index.html` is the source of truth. Before archiving a new build:
 
 ```bash
-cp /Users/shivamitankar/scriptflow/index.html /Users/shivamitankar/scriptflow/ios/www/index.html
+cp /Users/shivamitankar/scriptflow/index.html /Users/shivamitankar/scriptflow/ios/ScriptFlow.swiftpm/www/index.html
 ```
 
 Bump `bundleVersion` in `Package.swift`. Archive. Done.
 
 ## Swap the icon
 
-Replace `Assets.xcassets/AppIcon.appiconset/icon-1024.png` with a real 1024×1024 PNG (no alpha channel). The current one is a placeholder.
+Replace `ScriptFlow.swiftpm/Assets.xcassets/AppIcon.appiconset/icon-1024.png` with a real 1024×1024 PNG (no alpha channel). The current one is a placeholder.
