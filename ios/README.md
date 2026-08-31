@@ -1,43 +1,42 @@
 # ScriptFlow — iOS
 
-Swift Package iOS app (`.iOSApplication` product). No `.xcodeproj`, no CocoaPods, no wizard.
+Real `.xcodeproj` (same pattern as WaterHoop / Windchime). SwiftUI + WKWebView wrapping the bundled web app. No CocoaPods, no SPM deps, no Capacitor.
 
 ## Open + run
 
 ```bash
-open /Users/shivamitankar/scriptflow/ios/ScriptFlow.swiftpm
+open /Users/shivamitankar/scriptflow/ios/ScriptFlow.xcodeproj
 ```
 
-Xcode reads `Package.swift` and treats the folder as an iOS app project. Pick a simulator or your device, hit Run.
+Pick a simulator (or your phone), hit ▶.
 
-## Ship to App Store
+## Native features wired via `WebView.swift`
 
-1. `Package.swift` → set `teamIdentifier` to your Apple Developer Team ID (find it at https://developer.apple.com/account → Membership).
-2. Bump `bundleVersion` (`"1"` → `"2"` …) every upload. Bump `displayVersion` (`"1.0"` → `"1.1"` …) for public-facing version bumps.
-3. Product → **Archive** (real device or "Any iOS Device", not a simulator).
-4. Organizer opens → **Distribute App** → **App Store Connect** → **Upload**.
-5. On [App Store Connect](https://appstoreconnect.apple.com): create the app record (bundle ID `com.studio4by5.scriptflow`), fill metadata + screenshots + privacy policy URL, attach the build, submit for review.
-
-## Native features (already wired via `ContentView.swift`)
-
-The bundled `index.html` detects `window.webkit.messageHandlers.scriptflow` and routes to native:
+`index.html` detects `window.webkit.messageHandlers.scriptflow` and routes to native:
 
 - **Export button** → `UIActivityViewController` (iOS share sheet)
 - **Countdown warning (last 2s)** → warning haptic
 - **Session end** → success haptic
 
-These are the App Review Guideline 4.2 hook — a pure webview would get rejected.
+These satisfy App Review Guideline 4.2 (webview-only apps get rejected).
 
-## Update the app after web changes
+## Ship to App Store
 
-Root `index.html` is the source of truth. Before archiving a new build:
+1. Xcode → target → **Signing & Capabilities** → pick your Apple Developer team.
+2. Bump `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` in the target's Build Settings.
+3. Change device target from a simulator to **"Any iOS Device (arm64)"**.
+4. **Product → Archive**.
+5. Organizer → **Distribute App → App Store Connect → Upload**.
+6. On [App Store Connect](https://appstoreconnect.apple.com): create the app record (bundle ID `com.studio4by5.scriptflow`), fill metadata + screenshots + support URL + privacy policy URL, attach the build, submit for review.
+
+## After a web change
+
+Root `index.html` is the source of truth. Before archiving:
 
 ```bash
-cp /Users/shivamitankar/scriptflow/index.html /Users/shivamitankar/scriptflow/ios/ScriptFlow.swiftpm/www/index.html
+cp /Users/shivamitankar/scriptflow/index.html /Users/shivamitankar/scriptflow/ios/ScriptFlow/www/index.html
 ```
 
-Bump `bundleVersion` in `Package.swift`. Archive. Done.
+## Real app icon
 
-## Swap the icon
-
-Replace `ScriptFlow.swiftpm/Assets.xcassets/AppIcon.appiconset/icon-1024.png` with a real 1024×1024 PNG (no alpha channel). The current one is a placeholder.
+Replace `ScriptFlow/Assets.xcassets/AppIcon.appiconset/icon-1024.png` (1024×1024 PNG, no alpha).
