@@ -12,3 +12,5 @@ ios/**/xcuserdata/
 ios/**/DerivedData/
 ios/**/*.xcworkspace/xcuserdata/
 ios/**/build/
+ios/**/.swiftpm/xcode/xcuserdata/
+ios/.swiftpm/
