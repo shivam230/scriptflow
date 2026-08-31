@@ -16,7 +16,7 @@ struct ContentView: UIViewRepresentable {
         web.backgroundColor = bg
         web.scrollView.backgroundColor = bg
 
-        if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "www") {
+        if let url = Bundle.module.url(forResource: "index", withExtension: "html", subdirectory: "www") {
             web.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
         }
         context.coordinator.webView = web
