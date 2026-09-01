@@ -1,4 +1,4 @@
-# ScriptFlow — App Store Connect Submission Sheet
+# ScriptFloww — App Store Connect Submission Sheet
 
 Everything App Store Connect will ask for. Copy-paste values are ready; anything in `<angle brackets>` is yours to fill.
 
@@ -36,7 +36,7 @@ Everything App Store Connect will ask for. Copy-paste values are ready; anything
 
 | Field | Char limit | Suggested value |
 |---|---|---|
-| **App Name** | 30 | `ScriptFlow` |
+| **App Name** | 30 | `ScriptFloww` |
 | **Subtitle** | 30 | `Write live. Never look back.` (28) |
 | **Promotional Text** | 170 | `A forward-only writing surface. No backspace, no copy-paste — pause too long and the page resets. Built for freewriting, hooks, first drafts.` |
 
@@ -48,12 +48,12 @@ Alt subtitles if the first is taken:
 ### Description (4000 chars max)
 
 ```
-ScriptFlow is a forward-only writing surface for people who overthink first drafts.
+ScriptFloww is a forward-only writing surface for people who overthink first drafts.
 
 Start typing. If you stop for more than seven seconds, the whole page resets. There's no backspace. No copy or paste. You can't go back, only forward — and that's the point.
 
 WHY IT WORKS
-The tools you write in matter. When editing is one keystroke away, you edit. When it isn't, you write. ScriptFlow removes the escape hatches so the words that come out are actually yours — unpolished, honest, and moving.
+The tools you write in matter. When editing is one keystroke away, you edit. When it isn't, you write. ScriptFloww removes the escape hatches so the words that come out are actually yours — unpolished, honest, and moving.
 
 WHAT IT'S FOR
 • Reel and TikTok scripts you'd rather record raw than rehearse
@@ -105,7 +105,7 @@ writing,notes,journal,freewriting,script,ideas,focus,brainstorm,creativity,minim
 **Question**: "Do you or your third-party partners collect data from this app?"
 → **No**
 
-That single answer skips the rest of the questionnaire. ScriptFlow makes no analytics calls, no crash reports, no identifiers.
+That single answer skips the rest of the questionnaire. ScriptFloww makes no analytics calls, no crash reports, no identifiers.
 
 ### One caveat
 
@@ -138,7 +138,7 @@ Already in the project at `ScriptFlow/PrivacyInfo.xcprivacy`. Declares:
 ### Notes for the App Reviewer *(paste this exact text)*
 
 ```
-ScriptFlow is a forward-only writing app. Type into the editor and pause for 7 seconds to see the full loop: a countdown starts at 2 s, and the page resets to blank at 7 s, opening a session-complete sheet with an Export button.
+ScriptFloww is a forward-only writing app. Type into the editor and pause for 7 seconds to see the full loop: a countdown starts at 2 s, and the page resets to blank at 7 s, opening a session-complete sheet with an Export button.
 
 NATIVE FUNCTIONALITY (not a webview wrapper):
 1. Export button invokes UIActivityViewController (iOS share sheet) via WKScriptMessageHandler — reachable inside the completion sheet after a session ends.
@@ -203,26 +203,26 @@ Add two files to the scriptflow repo, deploy to Netlify:
 **scriptflow/privacy.html**
 ```html
 <!doctype html>
-<html><head><meta charset="utf-8"><title>ScriptFlow · Privacy</title>
+<html><head><meta charset="utf-8"><title>ScriptFloww · Privacy</title>
 <style>body{font-family:system-ui;max-width:640px;margin:48px auto;padding:0 24px;line-height:1.7;color:#1c1c1c}</style>
 </head><body>
 <h1>Privacy</h1>
-<p>ScriptFlow does not collect, transmit, or store any personal data.</p>
+<p>ScriptFloww does not collect, transmit, or store any personal data.</p>
 <p>Everything you write stays on your device. There are no accounts, no analytics, no tracking, no ads, and no server calls except loading Manrope font stylesheets from Google Fonts (a static CSS request, no cookies or identifiers).</p>
 <p>Sessions are held only in browser memory and clear when the timer resets or the app closes. Nothing you write is sent anywhere.</p>
 <p>Contact: <a href="mailto:hello@studio4by5.com">hello@studio4by5.com</a></p>
-<p><small>Last updated: 2026-09-01. ScriptFlow is built by Studio 4by5.</small></p>
+<p><small>Last updated: 2026-09-01. ScriptFloww is built by Studio 4by5.</small></p>
 </body></html>
 ```
 
 **scriptflow/support.html**
 ```html
 <!doctype html>
-<html><head><meta charset="utf-8"><title>ScriptFlow · Support</title>
+<html><head><meta charset="utf-8"><title>ScriptFloww · Support</title>
 <style>body{font-family:system-ui;max-width:640px;margin:48px auto;padding:0 24px;line-height:1.7;color:#1c1c1c}</style>
 </head><body>
 <h1>Support</h1>
-<p>ScriptFlow is a forward-only writing app. Type; if you pause for more than seven seconds, the page resets.</p>
+<p>ScriptFloww is a forward-only writing app. Type; if you pause for more than seven seconds, the page resets.</p>
 <h2>Common questions</h2>
 <p><b>Where did my text go?</b> Sessions clear on purpose. If you want to keep one, use the Export button in the session-complete sheet before starting a new one.</p>
 <p><b>Why can't I use backspace?</b> By design. The point is to write past mistakes instead of editing them.</p>
