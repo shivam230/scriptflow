@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScriptFloww · Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#200617; --ink:#f3e6ea; --muted:#7a5d68; --accent:#FF1C4A; --rule:#3a0f29; }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--ink); }
+  body { font-family:'Manrope',system-ui,sans-serif; max-width:640px; margin:0 auto; padding:64px 24px; line-height:1.7; font-weight:400; }
+  h1 { font-weight:600; font-size:32px; letter-spacing:-.02em; margin:0 0 8px; }
+  h2 { font-weight:600; font-size:18px; letter-spacing:-.01em; margin:32px 0 8px; color: var(--ink); }
+  .eyebrow { color:var(--muted); font-size:12px; letter-spacing:.12em; text-transform:uppercase; margin-bottom:32px; }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+  a:hover { border-bottom-color: var(--accent); }
+  b { color: var(--ink); font-weight: 600; }
+  small { color: var(--muted); font-size: 12px; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 32px 0; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">Script<em style="color:var(--accent);font-style:normal;font-weight:700;">Floww</em> · Support</div>
+  <h1>How ScriptFloww works.</h1>
+  <p>ScriptFloww is a forward-only writing app. Type into the page; if you pause for more than seven seconds, the page resets and the session is captured for export.</p>
+
+  <h2>Where did my text go?</h2>
+  <p>Sessions clear on purpose — that's the whole point. If you want to keep one, tap <b>Export</b> in the session-complete sheet before starting a new one. Export routes to the iOS share sheet on device, or the browser print dialog on web (save as PDF from there).</p>
+
+  <h2>Why can't I use backspace?</h2>
+  <p>By design. The app is built for writing past mistakes instead of editing them. Copy and paste are also disabled.</p>
+
+  <h2>Does it work offline?</h2>
+  <p>Yes. The only network request is a stylesheet for the Manrope font; the app still functions if it fails to load — it'll just use your system's default sans-serif.</p>
+
+  <h2>Can I make the timer longer?</h2>
+  <p>Not yet. Two seconds of grace + a five-second visible countdown is the whole spec.</p>
+
+  <hr>
+  <p>Get in touch: <a href="mailto:hello@studio4by5.com">hello@studio4by5.com</a></p>
+  <p><small>ScriptFloww is built by <a href="https://www.studio4by5.com">Studio 4by5</a>.</small></p>
+</body>
+</html>
