@@ -12,20 +12,24 @@
 
 <style>
 :root {
-  --paper:        #efe6d2;
-  --paper-shade:  #e6dcc5;
-  --paper-shadow: rgba(60, 40, 15, 0.18);
-  --ink:          #2b2420;
-  --ink-soft:     #5a4e45;
+  --paper:        #ece3cf;
+  --paper-shade:  #e0d6bd;
+  --paper-dark:   #c7bca0;
+  --ink:          #1f1a16;
+  --ink-soft:     #4a403a;
   --muted:        #8a7f6e;
   --carriage:     #26211e;
-  --carriage-hi:  #3d352f;
-  --carriage-lo:  #15110f;
-  --accent:       #a63b2e;
-  --topbar:       #1b1917;
-  --topbar-ink:   #d8cfc0;
-  --led-on:       #78b35a;
-  --led-off:      #b35a4a;
+  --carriage-hi:  #4a403a;
+  --carriage-mid: #2d2824;
+  --carriage-lo:  #0e0b09;
+  --accent:       #b14234;
+  --topbar:       #15130f;
+  --topbar-ink:   #d6cdba;
+  --topbar-mute:  #7a7262;
+  --led-green:    #76c252;
+  --led-green-off:#2a3a24;
+  --led-red:      #d94a3b;
+  --led-red-off:  #3a1a16;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -40,192 +44,266 @@ body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-/* ── Paper grain ──────────────────────────────────── */
+/* ── Paper grain + fibers ─────────────────────────── */
 body::before {
   content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0.08;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 2;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   background-size: 240px 240px;
   mix-blend-mode: multiply;
 }
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 2;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(1px 1px at 15% 22%, rgba(60,40,20,0.4), transparent 70%),
+    radial-gradient(1px 1px at 68% 44%, rgba(60,40,20,0.35), transparent 70%),
+    radial-gradient(1px 1px at 32% 71%, rgba(80,50,25,0.4), transparent 70%),
+    radial-gradient(1.5px 1px at 82% 18%, rgba(60,40,20,0.3), transparent 70%),
+    radial-gradient(1px 1.5px at 44% 88%, rgba(80,50,25,0.4), transparent 70%),
+    radial-gradient(1px 1px at 12% 55%, rgba(60,40,20,0.35), transparent 70%),
+    radial-gradient(1px 1px at 90% 68%, rgba(60,40,20,0.3), transparent 70%),
+    radial-gradient(1.5px 1px at 55% 30%, rgba(80,50,25,0.3), transparent 70%);
+}
 
-/* ── Topbar (dark strip) ─────────────────────────── */
+/* ── Topbar (dark strip) ──────────────────────────── */
 .topbar {
   position: fixed;
   top: 0; left: 0; right: 0;
-  padding: calc(env(safe-area-inset-top) + 10px) 16px 10px;
+  padding: calc(env(safe-area-inset-top) + 12px) 18px 12px;
   background: var(--topbar);
   color: var(--topbar-ink);
   display: grid;
-  grid-template-columns: 32px 1fr 32px;
+  grid-template-columns: 36px 1fr 36px;
   align-items: center;
   z-index: 20;
   font-family: 'Courier Prime', ui-monospace, monospace;
 }
 .topbar .icon-btn {
   background: transparent; border: 0; color: var(--topbar-ink);
-  width: 32px; height: 32px; display: grid; place-items: center;
-  cursor: pointer; font-size: 18px; opacity: 0.9;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  cursor: pointer; opacity: 0.9; padding: 0;
 }
 .topbar .icon-btn:active { opacity: 0.6; }
+.topbar .icon-btn svg { width: 20px; height: 20px; }
 .topbar .count {
   text-align: center;
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  font-size: 14px;
+  letter-spacing: 0.14em;
   font-variant-numeric: tabular-nums;
-  opacity: 0.85;
+  color: var(--topbar-ink);
 }
-.topbar .count .target { opacity: 0.5; margin-left: 4px; }
+.topbar .count .target { color: var(--topbar-mute); margin-left: 2px; }
 
 /* ── Paper surface ────────────────────────────────── */
 .sheet-area {
   position: fixed;
   left: 0; right: 0;
-  top: calc(env(safe-area-inset-top) + 52px);
+  top: calc(env(safe-area-inset-top) + 56px);
   bottom: 0;
   overflow: hidden;
   z-index: 3;
 }
 .paper-top-shadow {
   position: absolute; top: 0; left: 0; right: 0;
-  height: 24px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.12), transparent);
+  height: 28px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.18), transparent);
+  pointer-events: none; z-index: 7;
+}
+
+/* Smudges under the typing/carriage area */
+.smudges {
+  position: absolute;
+  left: 0; right: 0;
+  top: calc(54% + 24px);
+  height: 80px;
   pointer-events: none;
-  z-index: 6;
+  z-index: 4;
+  opacity: 0.4;
 }
 
 /* Editor sits in the paper area, text aligned to bottom (carriage line) */
 .editor-wrap {
   position: absolute;
   top: 0; left: 0; right: 0;
-  bottom: 46%;                     /* leaves room for carriage + roller below */
+  bottom: 46%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 24px 32px 0;
+  padding: 20px 28px 0;
   overflow: hidden;
 }
 .editor {
   width: 100%;
   background: transparent;
-  border: none;
-  outline: none;
+  border: none; outline: none;
   font-family: inherit;
   font-size: 20px;
-  line-height: 1.75;
+  line-height: 1.8;
   color: var(--ink);
   caret-color: var(--ink);
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.015em;
   min-height: 0;
+  text-align: center;
 }
 .editor.is-empty::before {
   content: attr(data-prompt);
   display: block;
   color: var(--muted);
   text-align: center;
-  font-style: italic;
   letter-spacing: 0.02em;
-  margin-bottom: 56px;
+  margin-bottom: 36px;
+  font-size: 15px;
 }
 .editor::selection { background: rgba(0,0,0,0.1); }
 
-/* Per-char strike shake + fade */
+/* Per-char strike shake + ink stamp */
 .editor .ink-fade {
   display: inline-block;
   animation: strike 180ms cubic-bezier(.2,.6,.2,1) both;
   transform-origin: center bottom;
 }
 @keyframes strike {
-  0%   { opacity: 0;   transform: translateY(-6px) rotate(-1.5deg); }
-  60%  { opacity: 1;   transform: translateY(0) rotate(0.4deg); }
+  0%   { opacity: 0;   transform: translateY(-5px) rotate(-2deg); }
+  55%  { opacity: 1;   transform: translateY(1px) rotate(0.6deg); }
   100% { opacity: 1;   transform: translateY(0) rotate(0); }
 }
 
-/* ── Carriage bar (fixed) ────────────────────────── */
+/* ── Carriage bar (fixed) ─────────────────────────── */
 .carriage {
   position: absolute;
   left: 0; right: 0;
-  top: calc(54% - 24px);
-  height: 48px;
+  top: calc(54% - 26px);
+  height: 52px;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   pointer-events: none;
 }
-.carriage::before {
-  content: '';
+/* The main rail cylinder */
+.rail {
   position: absolute;
   left: 0; right: 0;
   top: 50%;
   transform: translateY(-50%);
-  height: 36px;
+  height: 32px;
   background:
-    linear-gradient(to bottom, var(--carriage-hi) 0%, var(--carriage) 42%, var(--carriage-lo) 100%);
-  border-radius: 999px;
+    linear-gradient(to bottom,
+      var(--carriage-hi) 0%,
+      var(--carriage-mid) 32%,
+      var(--carriage) 55%,
+      var(--carriage-lo) 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -2px 4px rgba(0,0,0,0.5),
-    0 10px 20px rgba(40,24,8,0.28);
+    inset 0 1px 0 rgba(255,255,255,0.09),
+    inset 0 -2px 4px rgba(0,0,0,0.55),
+    0 12px 24px rgba(40,24,8,0.3);
 }
-.striker {
-  position: relative;
-  z-index: 2;
-  width: 118px;
-  height: 54px;
-  border-radius: 999px;
+/* End caps = darker cylindrical lugs */
+.rail::before, .rail::after {
+  content: '';
+  position: absolute;
+  top: -4px; width: 42px; height: 40px;
   background:
-    linear-gradient(to bottom, #342c27 0%, #1c1814 100%);
+    radial-gradient(ellipse at 50% 50%, #2a2320 0%, #0a0806 70%, #000 100%);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.1),
-    inset 0 -1px 0 rgba(0,0,0,0.4),
-    0 4px 10px rgba(0,0,0,0.25);
+    inset 0 -2px 2px rgba(0,0,0,0.6),
+    0 6px 12px rgba(0,0,0,0.4);
+  border-radius: 10px;
+}
+.rail::before { left: -8px; }
+.rail::after  { right: -8px; }
+
+/* Striker assembly (center) */
+.striker-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* The type bar / hammer arm sticking UP */
+.hammer {
+  width: 10px;
+  height: 24px;
+  background: linear-gradient(to bottom, #5a4d44 0%, #2b231e 100%);
+  border-radius: 3px 3px 1px 1px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 3px rgba(0,0,0,0.5);
+  position: relative;
+  transform-origin: bottom center;
+  transition: transform 60ms ease-out;
+}
+.hammer::before {
+  content: '';
+  position: absolute;
+  top: -3px; left: 50%;
+  transform: translateX(-50%);
+  width: 20px; height: 4px;
+  background: linear-gradient(to bottom, #776858, #3c3129);
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+.striker.strike .hammer { transform: translateY(2px) rotate(0deg); }
+
+/* Striker body */
+.striker {
+  position: relative;
+  width: 128px;
+  height: 56px;
+  margin-top: -4px;
+  border-radius: 999px;
+  background:
+    linear-gradient(to bottom, #3a322d 0%, #221c18 50%, #0e0a08 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -2px 2px rgba(0,0,0,0.5),
+    0 6px 14px rgba(0,0,0,0.4);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  transition: transform 60ms ease-out, background 0.3s;
+  justify-content: flex-start;
+  padding-left: 16px;
+  gap: 10px;
+  transition: background 0.3s;
 }
-.striker.strike { transform: translateY(1.5px); }
-.striker.warning { background: linear-gradient(to bottom, #5a1a12, #2a0a06); }
+.striker.warning {
+  background: linear-gradient(to bottom, #6a1f16 0%, #3a0f0a 50%, #1a0604 100%);
+}
 .led {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: var(--led-off);
-  box-shadow: 0 0 6px rgba(179,90,74,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
   transition: background 0.2s, box-shadow 0.2s;
 }
-.led.live {
-  background: var(--led-on);
-  box-shadow: 0 0 8px rgba(120,179,90,0.8), inset 0 1px 0 rgba(255,255,255,0.3);
+.led.green { background: var(--led-green-off); }
+.led.green.on {
+  background: var(--led-green);
+  box-shadow: 0 0 8px rgba(118,194,82,0.85), inset 0 1px 0 rgba(255,255,255,0.35);
 }
-.striker-hammer {
-  position: absolute;
-  top: -16px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 22px;
-  background: linear-gradient(to bottom, #4a403a, #1c1814);
-  border-radius: 2px 2px 0 0;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+.led.red { background: var(--led-red-off); }
+.led.red.on {
+  background: var(--led-red);
+  box-shadow: 0 0 8px rgba(217,74,59,0.85), inset 0 1px 0 rgba(255,255,255,0.35);
 }
 
-/* Countdown label on the carriage */
+/* Countdown label under carriage */
 .cd-label {
   position: absolute;
-  bottom: -22px;
+  top: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
   font-family: 'Courier Prime', monospace;
   font-size: 11px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.2em;
   color: var(--accent);
   opacity: 0;
   transition: opacity 0.2s;
@@ -233,37 +311,32 @@ body::before {
 }
 .cd-label.show { opacity: 1; }
 
-/* ── Roller / under-carriage area ────────────────── */
-.roller {
+/* ── Theme sun button (bottom right of paper) ────── */
+.sun-btn {
   position: absolute;
-  left: 0; right: 0;
-  top: calc(54% + 24px);
-  bottom: 0;
-  z-index: 4;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(60,40,15,0.14) 0%, transparent 50%);
+  right: 20px;
+  bottom: 14%;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 11;
+  display: grid; place-items: center;
+  opacity: 0.7;
+  transition: opacity 0.2s;
 }
-.roller::before {
-  content: '';
-  position: absolute;
-  top: 8px; left: 20px; right: 20px;
-  height: 40px;
-  background:
-    radial-gradient(ellipse at 30% 50%, rgba(0,0,0,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 50%, rgba(0,0,0,0.06) 0%, transparent 60%);
-  filter: blur(2px);
-}
+.sun-btn:hover { opacity: 1; }
+.sun-btn svg { width: 22px; height: 22px; color: var(--ink-soft); }
 
 /* ── Credit ──────────────────────────────────────── */
 .credit {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 14px);
+  bottom: calc(env(safe-area-inset-bottom) + 10px);
   left: 0; right: 0;
   text-align: center;
   font-family: 'Manrope', system-ui, sans-serif;
   font-size: 11px;
-  font-weight: 400;
   color: var(--muted);
   letter-spacing: 0.04em;
   z-index: 5;
@@ -287,11 +360,10 @@ body::before {
   color: var(--paper);
   font-family: 'Courier Prime', monospace;
   font-size: 12px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   padding: 10px 18px;
   border-radius: 2px;
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0; pointer-events: none;
   transition: opacity 0.3s, transform 0.3s;
   z-index: 30;
   box-shadow: 0 6px 18px rgba(0,0,0,0.3);
@@ -333,14 +405,13 @@ body::before {
   font-size: 11px;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   margin-bottom: 6px;
 }
 .title-input {
   display: block; width: 100%;
   font-family: 'Special Elite', 'Courier Prime', monospace;
-  font-weight: 400;
-  font-size: 24px;
+  font-weight: 400; font-size: 24px;
   letter-spacing: 0.01em;
   margin-bottom: 8px;
   color: var(--ink);
@@ -362,23 +433,19 @@ body::before {
 }
 .preview {
   font-family: 'Special Elite', 'Courier Prime', monospace;
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 15px; line-height: 1.7;
   color: var(--ink-soft);
   background: var(--paper-shade);
   border-left: 3px solid var(--accent);
   padding: 14px 16px;
   margin-bottom: 20px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 110px;
-  overflow: hidden;
+  white-space: pre-wrap; word-wrap: break-word;
+  max-height: 110px; overflow: hidden;
   position: relative;
 }
 .preview::after {
   content: '';
-  position: absolute;
-  inset: auto 0 0 0;
+  position: absolute; inset: auto 0 0 0;
   height: 36px;
   background: linear-gradient(to bottom, transparent, var(--paper-shade));
   pointer-events: none;
@@ -387,25 +454,20 @@ body::before {
 .btn {
   flex: 1;
   font-family: 'Courier Prime', monospace;
-  font-size: 14px;
-  letter-spacing: 0.1em;
+  font-size: 13px; letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 14px 16px;
   border-radius: 2px;
-  border: none;
-  cursor: pointer;
+  border: none; cursor: pointer;
   transition: transform 0.08s, opacity 0.2s;
 }
 .btn:active { transform: scale(0.975); }
-.btn-primary {
-  background: var(--ink); color: var(--paper);
-}
+.btn-primary { background: var(--ink); color: var(--paper); }
 .btn-secondary {
   background: transparent; color: var(--ink);
   border: 1px solid var(--ink);
 }
 
-/* Stagger */
 .sheet > * { opacity: 0; }
 .sheet.open .sheet-handle  { animation: fadeUp 300ms   0ms cubic-bezier(.2,.7,.2,1) both; }
 .sheet.open .eyebrow       { animation: fadeUp 360ms  80ms cubic-bezier(.2,.7,.2,1) both; }
@@ -418,11 +480,18 @@ body::before {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Responsive ──────────────────────────────────── */
-@media (max-width: 480px) {
-  .editor { font-size: 18px; line-height: 1.72; }
-  .striker { width: 102px; height: 48px; }
-  .editor.is-empty::before { font-size: 15px; margin-bottom: 44px; }
+/* ── Mobile-first adjustments ────────────────────── */
+@media (max-width: 420px) {
+  .editor { font-size: 18px; line-height: 1.75; }
+  .striker { width: 112px; height: 50px; padding-left: 14px; gap: 8px; }
+  .hammer { width: 9px; height: 20px; }
+  .hammer::before { width: 18px; }
+  .rail { height: 28px; }
+  .rail::before, .rail::after { width: 36px; height: 36px; }
+  .carriage { height: 46px; top: calc(54% - 23px); }
+  .editor.is-empty::before { font-size: 14px; margin-bottom: 28px; }
+  .sun-btn { right: 14px; bottom: 12%; width: 32px; height: 32px; }
+  .sun-btn svg { width: 20px; height: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
@@ -432,9 +501,13 @@ body::before {
 <body>
 
 <header class="topbar">
-  <button class="icon-btn" aria-label="Back" title="Back">←</button>
-  <div class="count"><span id="wordCount">0</span><span class="target"> / 7s</span></div>
-  <button class="icon-btn" id="shareBtn" aria-label="Share" title="Share">↑</button>
+  <button class="icon-btn" aria-label="Back" title="Back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  </button>
+  <div class="count"><span id="wordCount">0</span><span class="target"> / ∞</span></div>
+  <button class="icon-btn" id="shareBtn" aria-label="Share" title="Share">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+  </button>
 </header>
 
 <div class="sheet-area">
@@ -448,7 +521,7 @@ body::before {
       role="textbox"
       aria-multiline="true"
       aria-label="Script editor"
-      data-prompt="Begin here."
+      data-prompt="Need a first line?"
       spellcheck="true"
       autocomplete="off"
       autocapitalize="sentences"
@@ -456,15 +529,40 @@ body::before {
   </div>
 
   <div class="carriage" aria-hidden="true">
-    <div class="striker" id="striker">
-      <div class="striker-hammer"></div>
-      <div class="led" id="led"></div>
-      <div class="led" id="led2"></div>
+    <div class="rail"></div>
+    <div class="striker-wrap">
+      <div class="hammer"></div>
+      <div class="striker" id="striker">
+        <div class="led green" id="ledG"></div>
+        <div class="led red"   id="ledR"></div>
+      </div>
       <div class="cd-label" id="cdLabel">RESETTING IN 5</div>
     </div>
   </div>
 
-  <div class="roller" aria-hidden="true"></div>
+  <!-- Pencil smudges / scribbles under the carriage area -->
+  <svg class="smudges" viewBox="0 0 400 80" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="#5a4030" stroke-width="0.8" stroke-linecap="round" opacity="0.45">
+      <path d="M20 40 Q 45 20, 70 45 T 120 38" />
+      <path d="M100 55 Q 130 42, 160 58 T 220 50" />
+      <path d="M200 32 Q 240 18, 280 38 T 360 30" />
+      <path d="M50 68 Q 80 54, 120 72" />
+      <path d="M250 70 Q 290 58, 340 72" />
+      <path d="M160 20 Q 180 10, 200 22" />
+    </g>
+    <g fill="#5a4030" opacity="0.3">
+      <circle cx="40" cy="12" r="0.6"/>
+      <circle cx="88" cy="22" r="0.5"/>
+      <circle cx="170" cy="60" r="0.7"/>
+      <circle cx="310" cy="12" r="0.5"/>
+      <circle cx="368" cy="52" r="0.6"/>
+    </g>
+  </svg>
+
+  <!-- Theme sun (half-shade) icon -->
+  <button class="sun-btn" aria-label="Theme" title="Theme">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20V2z"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+  </button>
 </div>
 
 <footer class="credit">
@@ -479,12 +577,8 @@ body::before {
   <div class="sheet-handle"></div>
   <div class="eyebrow">Session complete</div>
   <input
-    type="text"
-    id="titleInput"
-    class="title-input"
-    placeholder="Name your script"
-    maxlength="60"
-    spellcheck="false"
+    type="text" id="titleInput" class="title-input"
+    placeholder="Name your script" maxlength="60" spellcheck="false"
     aria-label="Session title"
   />
   <div class="session-meta" id="sessionMeta"></div>
@@ -498,41 +592,33 @@ body::before {
 <script>
 (() => {
   'use strict';
-
   const IDLE_BEFORE_COUNTDOWN_MS = 2000;
   const COUNTDOWN_SEC = 5;
 
-  const editor       = document.getElementById('editor');
-  const wordCount    = document.getElementById('wordCount');
-  const striker      = document.getElementById('striker');
-  const led          = document.getElementById('led');
-  const led2         = document.getElementById('led2');
-  const cdLabel      = document.getElementById('cdLabel');
-  const sheet        = document.getElementById('sheet');
-  const backdrop     = document.getElementById('backdrop');
-  const preview      = document.getElementById('preview');
-  const sessionMeta  = document.getElementById('sessionMeta');
-  const toast        = document.getElementById('toast');
-  const dismissBtn   = document.getElementById('dismissBtn');
-  const exportBtn    = document.getElementById('exportBtn');
-  const shareBtn     = document.getElementById('shareBtn');
-  const titleInput   = document.getElementById('titleInput');
+  const editor      = document.getElementById('editor');
+  const wordCount   = document.getElementById('wordCount');
+  const striker     = document.getElementById('striker');
+  const ledG        = document.getElementById('ledG');
+  const ledR        = document.getElementById('ledR');
+  const cdLabel     = document.getElementById('cdLabel');
+  const sheet       = document.getElementById('sheet');
+  const backdrop    = document.getElementById('backdrop');
+  const preview     = document.getElementById('preview');
+  const sessionMeta = document.getElementById('sessionMeta');
+  const toast       = document.getElementById('toast');
+  const dismissBtn  = document.getElementById('dismissBtn');
+  const exportBtn   = document.getElementById('exportBtn');
+  const shareBtn    = document.getElementById('shareBtn');
+  const titleInput  = document.getElementById('titleInput');
 
-  // Native iOS bridge (no-op on web).
   const nativeBridge = window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.scriptfloww;
   const isNative = !!nativeBridge;
-  const nativeCall = (payload) => { if (nativeBridge) { try { nativeBridge.postMessage(payload); } catch (_) {} } };
+  const nativeCall = (p) => { if (nativeBridge) { try { nativeBridge.postMessage(p); } catch(_){} } };
   const haptic = (style) => nativeCall({ action: 'haptic', style });
 
-  // ── State ──
-  let sessionStart = null;
-  let idleTimer = null;
-  let countdownInterval = null;
-  let lastSession = null;
-
-  const fmtDate = (d) => d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-  const fmtTime = (d) => d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-
+  let sessionStart = null, idleTimer = null, countdownInterval = null, lastSession = null;
+  const fmtDate = (d) => d.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
+  const fmtTime = (d) => d.toLocaleTimeString(undefined, { hour:'numeric', minute:'2-digit' });
   const getText = () => editor.innerText;
 
   const showToast = (msg) => {
@@ -542,41 +628,32 @@ body::before {
     showToast._t = setTimeout(() => toast.classList.remove('show'), 1800);
   };
 
-  // ── Strike + LED feedback ──
   function strike() {
     striker.classList.remove('strike');
     void striker.offsetWidth;
     striker.classList.add('strike');
-    setTimeout(() => striker.classList.remove('strike'), 70);
+    setTimeout(() => striker.classList.remove('strike'), 90);
   }
-  function setLive(live) {
-    led.classList.toggle('live', live);
-    led2.classList.toggle('live', live);
-  }
+  function setLive(live)    { ledG.classList.toggle('on', live); }
+  function setWarn(on)      { ledR.classList.toggle('on', on); striker.classList.toggle('warning', on); }
 
-  // ── Countdown ──
   function resetTimers() {
     clearTimeout(idleTimer);
     if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
     cdLabel.classList.remove('show');
-    striker.classList.remove('warning');
+    setWarn(false);
   }
 
   function startCountdown() {
     let remaining = COUNTDOWN_SEC;
     cdLabel.textContent = `RESETTING IN ${remaining}`;
     cdLabel.classList.add('show');
-
     countdownInterval = setInterval(() => {
       remaining -= 1;
       cdLabel.textContent = remaining > 0 ? `RESETTING IN ${remaining}` : 'CLEARING';
-      if (remaining <= 2) {
-        striker.classList.add('warning');
-        haptic('warn');
-      }
+      if (remaining <= 2) { setWarn(true); haptic('warn'); }
       if (remaining <= 0) {
-        clearInterval(countdownInterval);
-        countdownInterval = null;
+        clearInterval(countdownInterval); countdownInterval = null;
         endSession();
       }
     }, 1000);
@@ -584,12 +661,10 @@ body::before {
 
   function scheduleIdle() {
     clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => {
-      if (getText().trim().length > 0) startCountdown();
-    }, IDLE_BEFORE_COUNTDOWN_MS);
+    idleTimer = setTimeout(() => { if (getText().trim().length > 0) startCountdown(); }, IDLE_BEFORE_COUNTDOWN_MS);
   }
 
-  // ── Editor: forward-only, no backspace/paste/cut ──
+  // Forward-only input
   editor.addEventListener('compositionstart', () => { editor._composing = true; });
   editor.addEventListener('compositionend',   () => { editor._composing = false; handleEdit(); });
 
@@ -598,16 +673,9 @@ body::before {
     const t = e.inputType || '';
     if (t.startsWith('delete')) { e.preventDefault(); return; }
     if (t === 'insertFromPaste' || t === 'insertFromPasteAsQuotation' ||
-        t === 'insertFromDrop'  || t === 'insertReplacementText') {
-      e.preventDefault(); return;
-    }
-    if (t === 'insertText' && e.data) {
-      e.preventDefault();
-      insertWithInk(e.data);
-    } else if (t === 'insertLineBreak' || t === 'insertParagraph') {
-      e.preventDefault();
-      insertWithInk('\n');
-    }
+        t === 'insertFromDrop'  || t === 'insertReplacementText') { e.preventDefault(); return; }
+    if (t === 'insertText' && e.data) { e.preventDefault(); insertWithInk(e.data); }
+    else if (t === 'insertLineBreak' || t === 'insertParagraph') { e.preventDefault(); insertWithInk('\n'); }
   });
   editor.addEventListener('paste',    (e) => e.preventDefault());
   editor.addEventListener('copy',     (e) => e.preventDefault());
@@ -658,22 +726,17 @@ body::before {
     }
   }
 
-  // ── Session end ──
   function endSession() {
     const text = getText().trim();
-    resetTimers();
-    setLive(false);
+    resetTimers(); setLive(false);
     if (!text) return;
-
     const ended = new Date();
     const started = sessionStart || ended;
     const durMs = ended - started;
     const words = text.split(/\s+/).filter(Boolean).length;
     const chars = text.length;
-    const m = Math.floor(durMs / 60000);
-    const s = Math.floor((durMs % 60000) / 1000);
+    const m = Math.floor(durMs / 60000), s = Math.floor((durMs % 60000) / 1000);
     const durStr = m > 0 ? `${m}m ${s}s` : `${s}s`;
-
     lastSession = { text, started, ended, wordCount: words, charCount: chars, durStr };
 
     const previewText = text.length > 240 ? text.slice(0, 240).trimEnd() + '…' : text;
@@ -709,9 +772,9 @@ body::before {
   exportBtn.addEventListener('click', exportPDF);
   shareBtn.addEventListener('click', () => { if (lastSession) exportPDF(); });
 
-  // Tap anywhere on paper to focus editor
   document.querySelector('.sheet-area').addEventListener('click', (e) => {
     if (e.target === editor) return;
+    if (e.target.closest('.sun-btn') || e.target.closest('.carriage')) return;
     editor.focus();
     const sel = window.getSelection();
     const r = document.createRange();
@@ -719,17 +782,13 @@ body::before {
     sel.removeAllRanges(); sel.addRange(r);
   });
 
-  // ── Export ──
   function exportPDF() {
     if (!lastSession) return;
     const title = (titleInput.value || '').trim() || 'Untitled Session';
-
     if (isNative) {
-      const payload = `${title}\n\n${lastSession.text}\n\n—\n${sessionMeta.textContent}`;
-      nativeCall({ action: 'share', text: payload });
+      nativeCall({ action: 'share', text: `${title}\n\n${lastSession.text}\n\n—\n${sessionMeta.textContent}` });
       return;
     }
-
     const esc = (s) => s.replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const w = window.open('', '_blank');
     if (!w) { alert('Enable pop-ups to export.'); return; }
@@ -737,10 +796,10 @@ body::before {
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&display=swap" rel="stylesheet">
 <style>
-  body{font-family:'Special Elite','Courier Prime',monospace;max-width:640px;margin:48px auto;padding:0 32px;color:#2b2420;line-height:1.75;background:#efe6d2;}
-  .eyebrow{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8a7f6e;margin-bottom:8px;}
+  body{font-family:'Special Elite','Courier Prime',monospace;max-width:640px;margin:48px auto;padding:0 32px;color:#1f1a16;line-height:1.75;background:#ece3cf;}
+  .eyebrow{font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8a7f6e;margin-bottom:8px;}
   h1{font-weight:400;font-size:28px;letter-spacing:.01em;margin:0 0 6px;}
-  .meta{font-family:'Courier Prime',monospace;color:#8a7f6e;font-size:12px;margin-bottom:20px;border-bottom:1px solid #d4c9b1;padding-bottom:20px;}
+  .meta{font-family:'Courier Prime',monospace;color:#8a7f6e;font-size:12px;margin-bottom:20px;border-bottom:1px solid #c7bca0;padding-bottom:20px;}
   .body{white-space:pre-wrap;font-size:15px;}
   @media print{body{margin:0;padding:24px;max-width:none;background:white;}}
 </style></head><body>
@@ -753,7 +812,6 @@ body::before {
     w.document.close();
   }
 
-  // ── Reload guard ──
   window.addEventListener('beforeunload', (e) => {
     if (getText().trim().length > 0) { e.preventDefault(); e.returnValue = ''; }
   });
