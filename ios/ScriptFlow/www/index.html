@@ -219,7 +219,7 @@ body::after {
 .rail::before { left: -8px; }
 .rail::after  { right: -8px; }
 
-/* Striker assembly (center) */
+/* Striker assembly — slides left/right along the rail as you type */
 .striker-wrap {
   position: absolute;
   left: 50%;
@@ -229,6 +229,8 @@ body::after {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: left 0.11s cubic-bezier(.2,.6,.2,1);
+  will-change: left;
 }
 /* The type bar / hammer arm sticking UP */
 .hammer {
@@ -598,6 +600,7 @@ body::after {
   const editor      = document.getElementById('editor');
   const wordCount   = document.getElementById('wordCount');
   const striker     = document.getElementById('striker');
+  const strikerWrap = document.querySelector('.striker-wrap');
   const ledG        = document.getElementById('ledG');
   const ledR        = document.getElementById('ledR');
   const cdLabel     = document.getElementById('cdLabel');
@@ -634,6 +637,27 @@ body::after {
     striker.classList.add('strike');
     setTimeout(() => striker.classList.remove('strike'), 90);
   }
+
+  // Head position follows the last-struck character (true typewriter feel)
+  function trackCarriage() {
+    const vw = window.innerWidth;
+    const spans = editor.querySelectorAll('.ink-fade');
+    const last = spans[spans.length - 1];
+    if (!last || editor.classList.contains('is-empty')) {
+      strikerWrap.style.left = '50%';
+      return;
+    }
+    const rect = last.getBoundingClientRect();
+    // Clamp inside the rail (keep clear of the end-caps)
+    const edge = Math.max(60, vw * 0.08);
+    const x = Math.max(edge, Math.min(vw - edge, rect.right));
+    strikerWrap.style.left = x + 'px';
+  }
+  function resetCarriageLeft() {
+    const vw = window.innerWidth;
+    strikerWrap.style.left = Math.max(60, vw * 0.08) + 'px';
+  }
+  window.addEventListener('resize', trackCarriage, { passive: true });
   function setLive(live)    { ledG.classList.toggle('on', live); }
   function setWarn(on)      { ledR.classList.toggle('on', on); striker.classList.toggle('warning', on); }
 
@@ -702,6 +726,7 @@ body::after {
     range.collapse(true);
     sel.removeAllRanges(); sel.addRange(range);
     strike();
+    resetCarriageLeft();
     handleEdit();
   }
 
@@ -725,6 +750,7 @@ body::after {
     range.collapse(true);
     s.removeAllRanges(); s.addRange(range);
     strike();
+    trackCarriage();
     handleEdit();
   }
 
@@ -772,6 +798,7 @@ body::after {
     editor.classList.add('is-empty');
     sessionStart = null;
     wordCount.textContent = '0';
+    strikerWrap.style.left = '50%';
     showToast('Script cleared');
     haptic('success');
     openSheet();
