@@ -130,7 +130,7 @@ body::after {
 .editor-wrap {
   position: absolute;
   top: 0; left: 0; right: 0;
-  bottom: 46%;
+  bottom: calc(50% + 20px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -675,13 +675,35 @@ body::after {
     if (t === 'insertFromPaste' || t === 'insertFromPasteAsQuotation' ||
         t === 'insertFromDrop'  || t === 'insertReplacementText') { e.preventDefault(); return; }
     if (t === 'insertText' && e.data) { e.preventDefault(); insertWithInk(e.data); }
-    else if (t === 'insertLineBreak' || t === 'insertParagraph') { e.preventDefault(); insertWithInk('\n'); }
+    else if (t === 'insertLineBreak' || t === 'insertParagraph') { e.preventDefault(); insertBreak(); }
   });
   editor.addEventListener('paste',    (e) => e.preventDefault());
   editor.addEventListener('copy',     (e) => e.preventDefault());
   editor.addEventListener('cut',      (e) => e.preventDefault());
   editor.addEventListener('drop',     (e) => e.preventDefault());
   editor.addEventListener('dragover', (e) => e.preventDefault());
+
+  function insertBreak() {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) {
+      editor.focus();
+      const r = document.createRange();
+      r.selectNodeContents(editor); r.collapse(false);
+      sel.removeAllRanges(); sel.addRange(r);
+    }
+    const range = sel.getRangeAt(0);
+    range.collapse(false);
+    const br = document.createElement('br');
+    range.insertNode(br);
+    // Trailing br so the caret has a visible empty line to sit on
+    const trailing = document.createElement('br');
+    br.parentNode.insertBefore(trailing, br.nextSibling);
+    range.setStartBefore(trailing);
+    range.collapse(true);
+    sel.removeAllRanges(); sel.addRange(range);
+    strike();
+    handleEdit();
+  }
 
   function insertWithInk(text) {
     const sel = window.getSelection();
